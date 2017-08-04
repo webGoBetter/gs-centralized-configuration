@@ -7,18 +7,18 @@ projects: [spring-cloud, spring-cloud-config]
 :source-highlighter: prettify
 :project_id: gs-centralized-configuration
 
-This guide walks you through the process of standing up, and consuming configuration from, the http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html[Spring Cloud Config Server]
+本指南将带你了解从建立 http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html[Spring Cloud Config Server]并从中获取配置的过程。
 
-== What you'll build
+== 你构建什么
 
-You'll setup a http://cloud.spring.io/spring-cloud-config/spring-cloud-config.html[Config Server] and then build a client that consumes the configuration on startup and then _refreshes_ the configuration without restarting the client.
+你会建立一个配置服务器，然后建立一个客户端在启动的时候获取配置，然后 _refreshes_ 配置而无需重新启动客户端。
 
-== What you'll need
+== 你需要什么
 
 :java_version: 1.8
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/prereq_editor_jdk_buildtools.adoc[]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/how_to_complete_this_guide.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/how_to_complete_this_guide.adoc[]
 
 [[reveal-gradle]]
 [.reveal-gradle]
@@ -28,27 +28,27 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 [.use-gradle]
 == Build with Gradle
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_system_intro.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/build_system_intro.adoc[]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/create_directory_structure_hello.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/create_directory_structure_hello.adoc[]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/create_both_builds.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/create_both_builds.adoc[]
 
 `configuration-service/build.gradle`
 // AsciiDoc source formatting doesn't support groovy, so using java instead
 [source,java]
 ----
-include::https://raw.githubusercontent.com/spring-guides/{project_id}/master/initial/configuration-service/build.gradle[]
+include::https://raw.githubusercontent.com/webGoBetter/{project_id}/master/initial/configuration-service/build.gradle[]
 ----
 
 `configuration-client/build.gradle`
 // AsciiDoc source formatting doesn't support groovy, so using java instead
 [source,java]
 ----
-include::https://raw.githubusercontent.com/spring-guides/{project_id}/master/initial/configuration-client/build.gradle[]
+include::https://raw.githubusercontent.com/webGoBetter/{project_id}/master/initial/configuration-client/build.gradle[]
 ----
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/spring-boot-gradle-plugin.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/spring-boot-gradle-plugin.adoc[]
 
 [[reveal-maven]]
 [.reveal-maven]
@@ -58,11 +58,11 @@ include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/
 [.use-maven]
 == Build with Maven
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/build_system_intro_maven.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/build_system_intro_maven.adoc[]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/create_directory_structure_hello.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/create_directory_structure_hello.adoc[]
 
-To get you started quickly, here are the complete configurations for the server and client applications:
+为了快速启动，这里是服务器和客户端应用程序的完整配置：
 
 `configuration-service/pom.xml`
 [source,xml]
@@ -73,17 +73,17 @@ include::https://raw.githubusercontent.com/spring-guides/{project_id}/master/ini
 `configuration-client/pom.xml`
 [source,xml]
 ----
-include::https://raw.githubusercontent.com/spring-guides/{project_id}/master/initial/configuration-client/pom.xml[]
+include::https://raw.githubusercontent.com/webGoBetter/{project_id}/master/initial/configuration-client/pom.xml[]
 ----
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/spring-boot-maven-plugin.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/spring-boot-maven-plugin.adoc[]
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/hide-show-sts.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/hide-show-sts.adoc[]
 
 
 [[initial]]
-== Stand up a Config Server
-You'll first need a Config Service to act as a sort of intermediary between your Spring applications and a typically version-controlled repository of configuration files. You can use Spring Cloud's `@EnableConfigServer` to standup a config server that other applications can talk to. This is a regular Spring Boot application with one annotation added to _enable_ the config server.
+== 启动配置服务器
+您首先需要一个配置服务，充当Spring应用程序和典型的版本控制的配置文件存储库之间的中介。你可以用Spring Cloud的 `@EnableConfigServer` 建立一个配置服务器，这样其他应用程序可以与它沟通。这是一个普通的Spring Boot应用，添加了一个注解，为了 _enable_ 配置服务器。
 
 `configuration-service/src/main/java/hello/ConfigServiceApplication.java`
 [source,java]
@@ -91,11 +91,11 @@ You'll first need a Config Service to act as a sort of intermediary between your
 include::complete/configuration-service/src/main/java/hello/ConfigServiceApplication.java[]
 ----
 
-The Config Server needs to know which repository to manage. There are several choices here, but we'll use a Git-based filesystem repository. You could as easily point the Config Server to a Github or GitLab repository, as well. On the file system, create a new directory and `git init` it. Then add a file called `a-bootiful-client.properties` to the Git repository. Make sure to also `git commit` it, as well. Later, you will connect to the Config Server with a Spring Boot application whose `spring.application.name` property identifies it as `a-bootiful-client` to the Config Server. This is how the Config Server will know which set of configuration to send to a specific client. It will _also_ send all the values from any file named `application.properties` or `application.yml` in the Git repository. Property keys in more specifically named files (like `a-bootiful-client.properties`) override those in `application.properties` or `application.yml`.
+配置服务器需要知道要管理哪个存储库。这里有几种选择，但我们将使用基于Git的文件系统存储库。你也可以将配置服务器指向GitHub或gitlab库。在文件系统上，创建一个新的目录然后在这个目录下运行 `git init` 。然后添加一个名为 `a-bootiful-client.properties` 的文件到Git仓库。确保 `git commit` 提交了它。不久，你将连接到一个Spring Boot应用的配置服务器。它的 `spring.application.name` 属性标志它对配置服务器来说，是一个 `a-bootiful-client` 。这就是配置服务器如何知道要发送给特定客户机的哪一组配置。它 _也_ 将发送任何在git仓库找到的文件名为 `application.properties` 或 `application.yml` 的值。具体命名的文件（如 `a-bootiful-client.properties`）属性键会重写那些 `application.properties` 或 `application.yml` 。
 
-Add a simple property and value, `message = Hello world`, to the newly created `a-bootiful-client.properties` file and then `git commit` the change.
+添加一个简单的属性和值, `message = Hello world`, 到刚创建的 `a-bootiful-client.properties` 文件，然后 `git commit` 这些更改.
 
-Specify the path to the Git repository by specifying the `spring.cloud.config.server.git.uri` property in `configuration-service/src/main/resources/application.properties`. Make sure to also specify a different `server.port` value to avoid port conflicts when you run both this server and another Spring Boot application on the same machine.
+通过指定 `configuration-service/src/main/resources/application.properties`文件中的 `spring.cloud.config.server.git.uri` 属性来执行Git仓库的路径。确保在同一台机器上同时运行此服务器和另一个Spring Boot应用程序时，指定一个不同 `server.port` 值，以避免端口冲突。
 
 `configuration-service/src/main/resources/application.properties`
 [source,properties]
@@ -104,9 +104,9 @@ include::complete/configuration-service/src/main/resources/application.propertie
 ----
 
 
-== Reading Configuration from the Config Server using the Config Client
+== 使用配置客户端从配置服务器读取配置
 
-Now that we've stood up a Config Server, let's stand up a new Spring Boot application that uses the Config Server to load its own configuration and that _refreshes_ its  configuration to reflect changes to the Config Server on-demand, without restarting the JVM. Add the `org.springframework.cloud:spring-cloud-starter-config` dependency in order to connect to the Config Server. Spring will see the configuration property files just like it would any property file loaded from `application.properties` or `application.yml` or any other `PropertySource`.
+现在我们已经建立了一个配置服务器，让我们建立一个新的Spring Boot应用程序,使用配置服务器加载自己的配置，根据需求 _刷新_ 它的配置以反映配置服务器上的的变化，而无需重新启动JVM。为了连接到配置服务器，添加 `org.springframework.cloud:spring-cloud-starter-config` 依赖。Spring会发现配置属性文件，和从 `application.properties` 或 `application.yml` 或任何其他 `PropertySource` 加载的一样。
 
 The properties to configure the  Config Client must necessarily be read in _before_ the rest of the application's configuration is read from the Config Server, during the _bootstrap_ phase. Specify the client's `spring.application.name` as `a-bootiful-client` and the location of the Config Server `spring.cloud.config.uri` in `configuration-client/src/main/resources/bootstrap.properties`, where it will be loaded earlier than any other configuration.
 
@@ -140,4 +140,4 @@ NOTE: we set `management.security.enabled=false` in the client app to make this 
 == Summary
 Congratulations! You've just used Spring to centralize configuration for all your services by first standing up a  and to then dynamically update configuration.
 
-include::https://raw.githubusercontent.com/spring-guides/getting-started-macros/master/footer.adoc[]
+include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/footer.adoc[]
