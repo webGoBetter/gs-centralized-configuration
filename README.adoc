@@ -108,7 +108,7 @@ include::complete/configuration-service/src/main/resources/application.propertie
 
 现在我们已经建立了一个配置服务器，让我们建立一个新的Spring Boot应用程序,使用配置服务器加载自己的配置，根据需求 _刷新_ 它的配置以反映配置服务器上的的变化，而无需重新启动JVM。为了连接到配置服务器，添加 `org.springframework.cloud:spring-cloud-starter-config` 依赖。Spring会发现配置属性文件，和从 `application.properties` 或 `application.yml` 或任何其他 `PropertySource` 加载的一样。
 
-The properties to configure the  Config Client must necessarily be read in _before_ the rest of the application's configuration is read from the Config Server, during the _bootstrap_ phase. Specify the client's `spring.application.name` as `a-bootiful-client` and the location of the Config Server `spring.cloud.config.uri` in `configuration-client/src/main/resources/bootstrap.properties`, where it will be loaded earlier than any other configuration.
+在 _bootstrap_ 期间，配置客户端的配置属性必须是在从配置服务器读取到其余的应用配置 _之前_ 。将客户端的 `spring.application.name` 的值指定为 `a-bootiful-client` 然后定位 `configuration-client/src/main/resources/bootstrap.properties` 文件中的 `spring.cloud.config.uri` 到配置服务器，它们回避其他任何配置都更早加载。
 
 
 `configuration-client/src/main/resources/bootstrap.properties`
@@ -118,9 +118,9 @@ include::complete/configuration-client/src/main/resources/bootstrap.properties[]
 ----
 
 
-The client may access any value in the Config Server using the traditional mechanisms (e.g. `@ConfigurationProperties`, `@Value("${...}")` or through the `Environment` abstraction). Create a Spring MVC REST controller that returns the resolved `message` property's value. Consult the https://spring.io/guides/gs/rest-service/[Building a RESTful Web Service] guide to learn more about building REST services with Spring MVC and Spring Boot.
+客户端可以使用畅通方式访问任何配置服务器中的值 (比如 `@ConfigurationProperties`, `@Value("${...}")` 或者 `Environment` 抽象化) .创建一个Spring MVC REST controller，返回已解析的 `message` 属性值。请参考 http://knost.top/guides/gs/rest-service/[Building a RESTful Web Service] 指南了解更多关于使用Spring MVC和Spring Boot构建REST服务的更多信息。 
 
-By default, the configuration values are read on the client's startup, and not again. You can force a bean to _refresh_ its configuration - to pull updated values from the Config Server - by annotating the `MessageRestController` with the Spring Cloud Config `@RefreshScope` and then by triggering a _refresh_ event.
+默认情况下，配置值是在客户机启动时读取的，而不要再次读取。你能强迫一个bean的配置 _refresh_ - 去配置服务器拉取更新了的值 - 通过对` MessageRestController `注解一个 Spring Cloud 配置 `@RefreshScope` 然后通过触发 _refresh_ 事件。
 
 `configuration-client/src/main/java/hello/ConfigClientApplication.java`
 [source,java]
@@ -128,16 +128,16 @@ By default, the configuration values are read on the client's startup, and not a
 include::complete/configuration-client/src/main/java/hello/ConfigClientApplication.java[]
 ----
 
-== Test the application
+== 测试你的应用
 
-Test the end-to-end result by starting the Config Service first and then, once loaded, starting the client. Visit the client app in the browser, `http://localhost:8080/message`. There, you should see the String `Hello world` reflected in the response.
+首先启动配置服务，然后，一旦加载，启动客户端，测试端到端结果。访问在浏览器、客户端应用程序 `http://localhost:8080/message` 。在那里，您应该看到响应中反映的字符串 `Hello world` 。
 
-Change the `message` key in the `a-bootiful-client.properties` file in the Git repository to something different (`Hello Spring!`, perhaps?). You can confirm that the Config Server sees the change by visiting `http://localhost:8888/a-bootiful-client/default`. You need to invoke the `refresh` Spring Boot Actuator endpoint in order to force the client to refresh itself and draw the new value in. Spring  Boot's Actuator  exposes operational endpoints, like health checks and environment information, about an application. In order to use it you must add `org.springframework.boot:spring-boot-starter-actuator` to the client app's CLASSPATH. You can invoke the  `refresh` Actuator endpoint by sending an empty HTTP `POST` to the client's `refresh` endpoint, `http://localhost:8080/refresh`, and then confirm it worked by reviewing the `http://localhost:8080/message` endpoint.
+为在Git仓库中的 `a-bootiful-client.properties` 文件改变 `message` 的键的值（ 比如 `Hello Spring!`）。你能通过访问 `http://localhost:8888/a-bootiful-client/default` 来确认配置服务器上的变化。为了强制客户端刷新自己，你需要调用刷新 Spring Boot Actuator的端点， Spring Boot的 Actuator  公开了操作端点，如关于应用程序的健康检查和环境信息。为了使用它，你必须添加 `org.springframework.boot:spring-boot-starter-actuator` 到客户端应用程序的类路径。你可以调用 `refresh` Actuator端点发送一个空的HTTP `后`到客户端的`刷新`端点，`http://localhost:8080/refresh` ，然后通过检查 `http://localhost:8080/message` 端点确认它的工作。
 
-NOTE: we set `management.security.enabled=false` in the client app to make this easy to test (by default since Spring Boot 1.5 the Actuator endpoints are secure by default). By default you can still access them over JMX if you don't set the flag.
+NOTE: 我们在客户机应用程序中设置了 `management.security.enabled=false` ，使之易于测试（默认情况下，从Spring Boot 1.5开始，执行器端点是默认安全的）。默认情况下，如果你不设置标志,你仍然可以通过JMX访问他们。
 
 
-== Summary
-Congratulations! You've just used Spring to centralize configuration for all your services by first standing up a  and to then dynamically update configuration.
+== 总结
+祝贺你!您刚刚使用Spring来为所有服务集中配置，首先是建立，然后动态更新配置。
 
 include::https://raw.githubusercontent.com/webGoBetter/getting-started-macros/master/footer.adoc[]
