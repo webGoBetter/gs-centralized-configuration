@@ -95,7 +95,7 @@ include::complete/configuration-service/src/main/java/hello/ConfigServiceApplica
 
 添加一个简单的属性和值, `message = Hello world`, 到刚创建的 `a-bootiful-client.properties` 文件，然后 `git commit` 这些更改.
 
-通过指定 `configuration-service/src/main/resources/application.properties`文件中的 `spring.cloud.config.server.git.uri` 属性来执行Git仓库的路径。确保在同一台机器上同时运行此服务器和另一个Spring Boot应用程序时，指定一个不同 `server.port` 值，以避免端口冲突。
+通过指定 `configuration-service/src/main/resources/application.properties` 文件中的 `spring.cloud.config.server.git.uri` 属性来执行Git仓库的路径。确保在同一台机器上同时运行此服务器和另一个Spring Boot应用程序时，指定一个不同 `server.port` 值，以避免端口冲突。
 
 `configuration-service/src/main/resources/application.properties`
 [source,properties]
